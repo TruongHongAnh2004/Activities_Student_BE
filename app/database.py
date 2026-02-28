@@ -1,51 +1,20 @@
-from neo4j import GraphDatabase
-from pymongo import MongoClient
-from dotenv import load_dotenv
-import psycopg2
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 import os
 
-load_dotenv()
+# In production, use environment variables!
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:honganh123@localhost:5432/student_management"
 
-def connect_neo4j():
-    uri = os.getenv("NEO4J_URI")
-    user = os.getenv("NEO4J_USER")
-    password = os.getenv("NEO4J_PASSWORD")
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-    driver = GraphDatabase.driver(uri, auth=(user, password))
-    return driver
+Base = declarative_base()
 
-
-def query_neo4j(driver, cypher):
-    with driver.session() as session:
-        result = session.run(cypher)
-        return [record.data() for record in result]
-
-
-def connect_mongo():
-    client = MongoClient(os.getenv("MONGO_CONNECTION"))
-    db = client[os.getenv("MONGO_DB")]
-    collection = db[os.getenv("MONGO_COLLECTION")]
-    return collection
-
-
-def query_mongodb(collection, filter_query):
-    return list(collection.find(filter_query))
-
-
-def connect_postgre():
-    conn = psycopg2.connect(
-        host=os.getenv("POSTGRES_HOST"),
-        database=os.getenv("POSTGRES_DATABASE"),
-        user=os.getenv("POSTGRES_USER"),
-        password=os.getenv('POSTGRES_PASSWORD'),
-        port=os.getenv("POSTGRES_PORT")
-    )
-    return conn
-
-
-def query_postgre(conn, sql):
-    cur = conn.cursor()
-    cur.execute(sql)
-    rows = cur.fetchall()
-    cur.close()
-    return rows
+# Dependency to get DB session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

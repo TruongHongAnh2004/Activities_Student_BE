@@ -75,7 +75,12 @@ class UpdateStudentFromMetadataRespoonse(BaseModel):
 class DeleteStudentFromMetadataResponse(BaseModel):
     message: str
     
-#8 Xem chi tiết dữ liệu của hocj sinh
+#8** Tim kiem de xem 1 hs\
+class FindStudentsResponse(BaseModel):
+    student_code: List[str]
+    class_of_student: str
+    
+#8 Xem chi tiết dữ liệu của hoc sinh
 class DetailStudentResponse(BaseModel):
     student_code: str 
     full_name: str

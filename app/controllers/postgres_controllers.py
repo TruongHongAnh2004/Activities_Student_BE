@@ -1,9 +1,17 @@
 from fastapi import APIRouter
 
-from app.schemas.management_schemas import CreateStudentRequest, CreateStudentResponse, DeleteStudentResponse, DetailStudentResponse, UpdateStudentRequest, UpdateStudentResponse
+from app.schemas.management_schemas import CreateStudentRequest, CreateStudentResponse, DeleteStudentResponse, DetailStudentResponse, FindStudentsResponse, UpdateStudentRequest, UpdateStudentResponse
 
 
 postgres= APIRouter(prefix="/postgre", tags=["Postgre"])
+#8**
+@postgres.get("/find-students/data/", response_model= FindStudentsResponse)
+def get_detail_student(student_code: str):
+    find_students_reponse = {
+        'student_code': ['48001', '48002','48003'],
+        'class_of_student': "1a1"
+    }
+    return find_students_reponse
 #8 Xem chi tiết dữ liệu của học sinh
 @postgres.get("/students/data/{student_code}", response_model= DetailStudentResponse)
 def get_detail_student(student_code: str):

@@ -18,8 +18,8 @@ def find_activities_student(type: str, begin_time: str, end_time: str):
 @users.get("/information", response_model= UserResponse)
 def user_information(email: str):
     user_information_response = {
-        'name': 'My My', 
+        'name': 'Nguyễn Văn An', 
         'email': 'anguyenvan@gmail.com',
-        'role': 'Giao Vien'
+        'role': 'Giáo Viên'
     }
     return user_information_response
