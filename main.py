@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,7 +8,16 @@ from app.controllers.management_controllers import metadata
 from app.controllers.admin_controllers import admin 
 from app.controllers.user_controllers import users 
 from app.controllers.extract_controllers import extract
-app = FastAPI()
+from app.database import close_neo4j
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup logic (optional)
+    yield
+    # Shutdown logic
+    await close_neo4j()
+    
+app = FastAPI(lifespan=lifespan)
     
 origins = [
     "http://localhost:3000"

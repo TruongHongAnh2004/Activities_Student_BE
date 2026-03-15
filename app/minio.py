@@ -5,19 +5,15 @@ import os
 
 load_dotenv()
 
-def connect_minio():
-    client = Minio(
-        os.getenv("MINIO_URL"),
-        access_key=os.getenv("MINIO_ACCESS_KEY"),
-        secret_key=os.getenv("MINIO_SECRET_KEY"),
-        secure=os.getenv("MINIO_SECURE")
-    )
-    return client
+minio_client = Minio(
+    "127.0.0.1:9000",
+    access_key="minioadmin",
+    secret_key="minioadmin",
+    secure=False
+)
 
 
-def download_image_minio(client, bucket, object_name, save_path):
-    try:
-        client.fget_object(bucket, object_name, save_path)
-        print(f"Đã tải về: {save_path}")
-    except S3Error as e:
-        print("Lỗi MinIO:", e)
+# Ensure the bucket exists
+if not minio_client.bucket_exists("img"):
+    minio_client.make_bucket("img")
+

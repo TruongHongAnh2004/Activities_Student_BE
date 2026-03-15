@@ -48,3 +48,14 @@ def match_behaviour_with_face(face_boxes, behavior_boxes):
             
     return results
             
+def convert_yolo_result(results: list):
+    r = []
+    
+    for result in results:
+        names = [result.names[cls.item()] for cls in result.boxes.cls.int()]
+        
+        for index, item in enumerate(result.boxes.xyxy):
+            x1, y1, x2, y2 = map(int, item)
+            r.append({'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2, 'name': names[index]})
+
+    return r 

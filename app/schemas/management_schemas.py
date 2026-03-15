@@ -19,7 +19,6 @@ class BoundingBox(BaseModel):
     x2: int
     y2: int
 
-
 class StudentDetection(BaseModel):
     student_code: str
     bbox: BoundingBox
@@ -27,6 +26,12 @@ class StudentDetection(BaseModel):
     crop_image_id: str | None = None
 
 class ExtractStudentFromFrameResponse(BaseModel):
+    image_id: str
+    total_students: int
+    students: List[StudentDetection]
+    
+#2+ từ video
+class ExtractStudentFromVideoResponse(BaseModel):
     image_id: str
     total_students: int
     students: List[StudentDetection]
